@@ -1,7 +1,10 @@
+#编码：utf-8
 #encoding:utf-8
 
+# 版权 2015 Eye Physics 和 Jay Watson
 # Copyright 2015 Eye Physics and Jay Watson
 #
+# 创建标准尺寸的螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母作为组件，应该可以打印为可工作的零件。
 # Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
 # in standard sizes as components, that should print as workable parts.
 #
@@ -21,6 +24,7 @@ module EP
 module EPFasteners
 
 
+# 监听新模型打开并启动模型观察者
 # Watch for new models opening and start the model observer
 #=============================================================================
 class EPFastenerAppObserver < Sketchup::AppObserver
@@ -42,9 +46,12 @@ class EPFastenerAppObserver < Sketchup::AppObserver
 end
 
 #-----------------------------------------------------------------------------
+# 对于钻孔和攻丝孔，如果孔是"贯穿"的，则创建第二个组件粘接到远侧以切割开口。
 # For Drilled Holes and Tapped Holes, if the hole is "Thru" then create a 2nd 
 # component to Glue to the far side to cut the opening. 
+# 如果长度大于0.0，则两个组件都存在，只需将另一个放在正确的面上。
 # If length is greater than 0.0 then both components exist, just place the other one on the correct face.
+# 如果长度为0，确定正确的面和长度并调用<obj>.create(instance, length)方法来构建新组件。然后将其粘接到正确的面上。
 # If length is 0, determine the correct face and length and call the <obj>.create(instance, length) method
 # to build a new component. Then glue it to the correct face.
 #
@@ -91,6 +98,7 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
                   faces.each{ |f| 
                      if p1.distance_to_plane(@glue_to.plane) >= p1.distance_to_plane(f.plane)
                         #--------------------------------------------
+                        #距离较小。方向正确吗？
                         #Less distance. Is it in the right direction?
                         #--------------------------------------------
                         vg = p1.vector_to(Geom.intersect_line_plane(line, f.plane))
@@ -108,6 +116,7 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
                   end
                   
                   #--------------------------------------------------------------------             
+                  # 紧固件辅助类必须有一个create(instance, length)方法
                   # Fastener helper classes must have a create(instance, length) method
                   #--------------------------------------------------------------------
                   @Partname = @instance.description + " Length=#{@length.to_s}"
@@ -116,6 +125,7 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
             end
         else
             #---------------------------------------------------------------
+            #指定长度... 辅助应该已经作为定义存在
             #Length specified... Helper should already exist as a definition
             #---------------------------------------------------------------
 
@@ -153,18 +163,18 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
  
       if !defn.nil? 
          t  = @instance.transformation
-         p2 = Geom::Point3d.new(0, 0 ,@zero - @length).transform(t)                                        #offset the origin by length along the z axis acording to the instance orientation
+         p2 = Geom::Point3d.new(0, 0 ,@zero - @length).transform(t)                                        #根据实例方向沿z轴偏移原点长度
          tz = Geom::Transformation.axes(p2, [0.00 - t.xaxis.x, 0.00 - t.xaxis.y, 0.00 - t.xaxis.z], 
                                             [0.00 - t.yaxis.x, 0.00 - t.yaxis.y, 0.00 - t.yaxis.z], 
-                                            [0.00 - t.zaxis.x, 0.00 - t.zaxis.y, 0.00 - t.zaxis.z])        #Reverse the axes oorientation to face the original instance
+                                            [0.00 - t.zaxis.x, 0.00 - t.zaxis.y, 0.00 - t.zaxis.z])        #反转轴方向以面向原始实例
 
          h = Sketchup.active_model.entities.add_instance(defn, tz)
 
-         if Geom.intersect_plane_plane(@glued_to.plane, @glue_to.plane).nil?                               # Dont glue if the planes are not parallel... it's ugly.
+         if Geom.intersect_plane_plane(@glued_to.plane, @glue_to.plane).nil?                               # 如果平面不平行，不要粘接... 看起来很丑。
             h.glued_to = @glue_to
          end
      end
-     @instance.set_attribute "Fastener", "Helper", @helpername                                             # mark it as done by this helper
+     @instance.set_attribute "Fastener", "Helper", @helpername                                             # 标记为由这个辅助完成
 
      closeStatus()
 
@@ -205,8 +215,9 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
 end
 
 #-----------------------------------------------------------------------------
+# 检查此脚本文件是否在此SU会话中之前已加载
 # Checks if this script file has been loaded before in this SU session
-unless file_loaded?(__FILE__)                   # If not, create menu entries
+unless file_loaded?(__FILE__)                   # 如果没有，创建菜单条目
 
     names=["螺纹工具","align_large.png","align_small.png","螺栓/螺母/螺纹孔/钻孔"]
 

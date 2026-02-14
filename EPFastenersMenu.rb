@@ -1,5 +1,7 @@
+# 版权 2015 Eye Physics 和 Jay Watson
 # Copyright 2015 Eye Physics and Jay Watson
 #
+# 创建标准尺寸的螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母作为组件，应该可以打印为可工作的零件。
 # Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
 # in standard sizes as components, that should print as workable parts.
 #

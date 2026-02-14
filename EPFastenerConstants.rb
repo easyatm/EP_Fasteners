@@ -1,8 +1,12 @@
 # Copyright 2015 Eye Physics and Jay Watson
+# 版权 2015 Eye Physics 和 Jay Watson
 #
 # Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
+# 创建螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母
 # in standard sizes as components, that should print as workable parts.
+# 以标准尺寸作为组件，应可打印为可工作的零件。
 #
+# 2.01.2015  Jay Watson, Eye Physics
 # 2.01.2015  Jay Watson, Eye Physics
 #-----------------------------------------------------------------------------
 
@@ -13,6 +17,7 @@ class EPFastenerConstants
 #=============================================================================
 
         #Standard number of segments per loop.  MUST BE A MULTIPLE OF 6!
+        # 每个循环的标准段数。必须是6的倍数！
         #
         @@NumberOfArcSegments = 18.0
 
@@ -67,7 +72,9 @@ class EPFastenerConstants
 
 
         # UTS螺纹标准
+        # UTS Thread Standards
         # 尺寸, 螺纹类型, 螺纹距, Dmaj
+        # Size, Thread Type, Pitch, Dmaj
         @@UTS = []
         @@UTS << ["\#0",	"Coarse",	"0.0125\"",	"0.0600\""]
         @@UTS << ["\#0",	"Extra Fine",	"0.0125\"",	"0.0600\""]
@@ -204,7 +211,9 @@ class EPFastenerConstants
 
 
         # 标准六角螺母
+        # Standard Hex Nuts
         # 螺栓尺寸、扳手、厚度
+        # Bolt Size, Wrench, Thickness
         @@NUT = []
         @@NUT << ["\#0",  	["5/32\"" ,	"5/32\""]]
         @@NUT << ["\#1",  	["5/32\"" ,	"0.050\""]]
@@ -252,13 +261,20 @@ class EPFastenerConstants
 	@@NUT << ["M30",	["46.000mm",	"18.700mm"]]
 
         # 标准螺栓
+        # Standard Bolts
         # Threadlength is the minimum amount of thread to provide when Fullthread = No
+        # 螺纹长度是当Fullthread = No时提供的最小螺纹量
         #         Hex head is wrench and head thickness
+        #         六角头是扳手和头厚度
         #         Socket head is Allen key size, head diameter and thickness
+        #         内六角头是内六角扳手尺寸、头直径和厚度
         #         Machine head (pan head) is width, thickness, Phillips head size, diameter at top of phillips head
+        #         机器头（盘头）是宽度、厚度、十字头尺寸、十字头顶部的直径
         #         Set Screw is Allen key size.
+        #         定位螺钉是内六角扳手尺寸。
         #
         #         Boltsize, threadlength, 		HEX 			|Socket 			|Machine (width, height, phillips, cutout)      |Set screw
+        #         螺栓尺寸, 螺纹长度, 		六角 			|内六角 			|机器 (宽度, 高度, 十字, 切口)      |定位螺钉
         @@BOLT = []
         @@BOLT << ["\#0",	"99.9\""	,["5/32\"" ,"5/32\""]	,["0.050\"","0.096\"","0.060\""],	["0.116\"",  "0.044\"", 0, "0.060\""] 		,["0.025\""]]
         @@BOLT << ["\#1",	"99.9\""	,["5/32\"" ,"0.050\""]	,["1/16\"","0.118\"","0.073\""]	,	["0.142\"",  "0.053\"", 0, "0.078\""] 		,["0.025\""]]
@@ -307,7 +323,9 @@ class EPFastenerConstants
 
 
         #标准十字头螺丝刀尺寸 0 到 4
+        # Standard Phillips screwdriver sizes 0 to 4
         # 尺寸 4 提供给 1/2 英寸以上的机头，即使它们可能很难找到 :D
+        # Size 4 provided for heads 1/2 inch and above, even though they may be hard to find :D
         #
         @@PHILLIPS = []  # [size, slot width, bottom circle diam <- unused...]
         @@PHILLIPS << [0, "0.0320\"", "0.055\""]
@@ -318,7 +336,9 @@ class EPFastenerConstants
 
 
 #=============================================================================
+#验证测量输入并将其转换为本地单位
 # Validate a measurement input and convert it to local units
+# Grrrr... 分数标记为英寸无论如何都会被to_l转换为本地单位，如mm
 # Grrrr... fractions marked as inches are converted to local units such as mm
 # anyway by to_l 
 #=============================================================================

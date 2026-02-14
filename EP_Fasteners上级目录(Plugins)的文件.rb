@@ -16,7 +16,7 @@ module EP
     loader = File.join(File.dirname(__FILE__), "EP_Fasteners", "EPFasteners.rb")
     extension = SketchupExtension.new("EP Fasteners Tool", loader)
     extension.description = "Creates Standard bolts, nuts and threaded holes"
-    extension.version     = "1.01"
+    extension.version     = "1.02"
     extension.creator     = "Jay Watson"
     extension.copyright   = "2015, Eye Physics, llc and " <<
                             "Jay Watson"

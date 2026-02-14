@@ -1,7 +1,10 @@
 # Copyright 2015 Eye Physics and Jay Watson
+# 版权 2015 Eye Physics 和 Jay Watson
 #
-# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
+# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts
+# 创建螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母
 # in standard sizes as components, that should print as workable parts.
+# 以标准尺寸作为组件，应可打印为可工作的零件。
 #
 # 2.01.2015  Jay Watson, Eye Physics
 #-----------------------------------------------------------------------------
@@ -53,6 +56,7 @@ class EPDrilledHole < EPFastenerConstants
       model = Sketchup.active_model
 
          #Does this Hole exist in the model already?
+         # 此孔是否已经在模型中存在？
          #
          #partname = "EP Drilled Hole #{@drillsize}..."
          defn = Sketchup.active_model.definitions[self.partname]
@@ -161,6 +165,7 @@ end
       helper = ""
       if @@ThruHole == "Yes" && @@Length == @@ZERO
          #Build the helper and create the hole when helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @@Length = @@ZERO
          helper = "Helper "
       end
@@ -172,6 +177,7 @@ end
       helper = ""
       if @thruhole == "Yes" && @length == @@ZERO
          #Build the helper and create the hole when helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @length = @@ZERO
          helper = "Helper "
       end
@@ -213,6 +219,7 @@ end
       defn      = ""
 
       #Does this Hole exist in the model already?
+      # 此孔是否已经在模型中存在？
       #
       #partname = "EP Drilled Hole #{@drillsize}"
       defn = Sketchup.active_model.definitions[partname]
@@ -246,6 +253,7 @@ end
 
       if @thruhole == "Yes" && @length == @@ZERO
          #Build the helper and create the hole when helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @length = @@ZERO
          create_helper(d, container)
       else
@@ -256,6 +264,7 @@ end
 #---------------------------------------------------------------------------------------------------------
    def create_helper(diam, container)
       #Place the opening and then build the hole once we find the other side with another component...
+      # 放置开口，然后一旦我们用另一个组件找到另一侧就构建孔...
 
       numberofarcsegments = @@NumberOfArcSegments
       angle = (2 * Math::PI) / numberofarcsegments

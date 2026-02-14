@@ -1,5 +1,7 @@
+# 版权 2015 Eye Physics 和 Jay Watson
 # Copyright 2015 Eye Physics and Jay Watson
 #
+# 创建标准尺寸的螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母作为组件，应该可以打印为可工作的零件。
 # Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts
 # in standard sizes as components, that should print as workable parts.
 #
@@ -54,8 +56,10 @@ module EP
          def self.continue
             model = Sketchup.active_model
             #Does this Bolt exist in the model already?
+            # 此螺栓是否已经在模型中存在？
             #
             #partname = "EP Threaded Bolt #{@@BoltSize}..."
+            #partname = "EP螺纹螺栓 #{@@BoltSize}..."
             defn = Sketchup.active_model.definitions[self.partname]
             if defn.nil?
                model.start_operation(self.partname, true)
@@ -452,6 +456,7 @@ module EP
          #---------------------------------------------------------------------------------------------------------
          def create_hexhead( hex, holeradius, offset, container)
             #Hex contains wrench size and head thickness
+            # 六角头包含扳手尺寸和头部厚度
             #
             numberofarcsegments = @@NumberOfArcSegments		#better be a multiple of 6
             numberperside = numberofarcsegments / 6
@@ -504,6 +509,7 @@ module EP
          #---------------------------------------------------------------------------------------------------------
          def create_sockethead(  socket, holeradius,  offset, container)
             #socket contains wrench size, diameter and head thickness
+            # 套筒头包含扳手尺寸、直径和头部厚度
             #
             numberofarcsegments = @@NumberOfArcSegments			#better be a multiple of 6
             numberperside = numberofarcsegments / 6
@@ -572,6 +578,7 @@ module EP
          #---------------------------------------------------------------------------------------------------------
          def create_machinehead(  machine, holeradius,  offset, container)
             #machine head diam, thickness, phillips size, diameter of phillips opening
+            # 机器头直径、厚度、十字螺丝尺寸、十字螺丝开口直径
 
             numberofarcsegments = @@NumberOfArcSegments			#better be a multiple of 6
 
@@ -796,6 +803,7 @@ module EP
          #---------------------------------------------------------------------------------------------------------
          def create_sethead( set, holeradius,  offset, container)
             #set contains key size
+            # 沉头螺丝包含钥匙尺寸
             #
             numberofarcsegments = @@NumberOfArcSegments			#better be a multiple of 6
             numberperside = numberofarcsegments / 6

@@ -1,7 +1,10 @@
 # Copyright 2015 Eye Physics and Jay Watson
+# 版权 2015 Eye Physics 和 Jay Watson
 #
-# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
+# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts
+# 创建螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母
 # in standard sizes as components, that should print as workable parts.
+# 以标准尺寸作为组件，应可打印为可工作的零件。
 #
 # 2.01.2015  Jay Watson, Eye Physics
 #-----------------------------------------------------------------------------
@@ -86,6 +89,7 @@ class EPWasher < EPFastenerConstants
          end
 
          #Does this washer exist in the model already?
+         # 此垫圈是否已经在模型中存在？
          #
          #partname = "EP Washer #{@boltsize}"
          defn = Sketchup.active_model.definitions[partname]
@@ -108,6 +112,7 @@ class EPWasher < EPFastenerConstants
    def self.continue
        model = Sketchup.active_model
        #Does this Bolt exist in the model already?
+       # 此螺栓是否已经在模型中存在？
        #
        #partname = "EP Washer #{@@BoltSize}..."
        defn = Sketchup.active_model.definitions[self.partname]

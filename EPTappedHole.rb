@@ -1,7 +1,10 @@
 # Copyright 2015 Eye Physics and Jay Watson
+# 版权 2015 Eye Physics 和 Jay Watson
 #
-# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts 
+# Create Bolts, Screws, Washers, Tapped holes, drilled holes and nuts
+# 创建螺栓、螺丝、垫圈、攻丝孔、钻孔和螺母
 # in standard sizes as components, that should print as workable parts.
+# 以标准尺寸作为组件，应可打印为可工作的零件。
 #
 # 2.01.2015  Jay Watson, Eye Physics
 #-----------------------------------------------------------------------------
@@ -56,6 +59,7 @@ class EPTappedHole < EPFastenerConstants
       model = Sketchup.active_model
 
          #Does this Hole exist in the model already?
+         # 此孔是否已经在模型中存在？
          #
          #partname = "Tapped Hole #{@boltsize}..."
          defn = Sketchup.active_model.definitions[self.partname]
@@ -173,6 +177,7 @@ end
       helper = ""
       if @@ThruHole == "Yes" && @@Length == @@ZERO
          #Build the helper and create the hole when helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @@Length = @@ZERO
          helper = "Helper "
       end
@@ -184,6 +189,7 @@ end
       helper = ""
       if @thruhole == "Yes" && @length.to_l == @@ZERO
          #Build the helper and create the hole when helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @length = @@ZERO
          helper = "Helper "
       end
@@ -225,6 +231,7 @@ end
 
 #---------------------------------------------------------------------------------------------------------
 #  Called by the InstancePlace observer to create a threaded hole of the correct length
+#  被InstancePlace观察者调用以创建正确长度的螺纹孔
 #
    def create(instance, length)
       @@ZERO = "0.0".to_l
@@ -246,6 +253,7 @@ end
       defn      = ""
 
       #Does this Hole exist in the model already?
+      # 此孔是否已经在模型中存在？
       #
       #partname = "Tapped Hole #{@boltsize}"
       defn = Sketchup.active_model.definitions[partname]
@@ -300,6 +308,7 @@ end
      
       if @thruhole == "Yes" && @length.to_l == @@ZERO
          #Build the helper and create the hole when the helper is instantiated.
+         # 当助手被实例化时构建助手并创建孔。
          @length = @@ZERO
          create_helper(d + radius, container)    # end result is diam + 2 * H/8
       else
@@ -310,6 +319,7 @@ end
 #---------------------------------------------------------------------------------------------------------
    def create_helper(diam, container)
       #Place the opening and then build the tapped hole once we find the other side with another component...
+      # 放置开口，然后一旦我们用另一个组件找到另一侧就构建螺纹孔...
  
       numberofarcsegments = @@NumberOfArcSegments
       angle = (2 * Math::PI) / numberofarcsegments
