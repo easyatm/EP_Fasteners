@@ -164,9 +164,16 @@ class EPFastenerModelObserver < Sketchup::ModelObserver
       if !defn.nil? 
          t  = @instance.transformation
          p2 = Geom::Point3d.new(0, 0 ,@zero - @length).transform(t)                                        #根据实例方向沿z轴偏移原点长度
-         tz = Geom::Transformation.axes(p2, [0.00 - t.xaxis.x, 0.00 - t.xaxis.y, 0.00 - t.xaxis.z], 
+         
+         # 原始代码（备份）- 反转X、Y、Z三个轴会导致螺纹方向错误
+         # tz = Geom::Transformation.axes(p2, [0.00 - t.xaxis.x, 0.00 - t.xaxis.y, 0.00 - t.xaxis.z], 
+         #                                    [0.00 - t.yaxis.x, 0.00 - t.yaxis.y, 0.00 - t.yaxis.z], 
+         #                                    [0.00 - t.zaxis.x, 0.00 - t.zaxis.y, 0.00 - t.zaxis.z])        #反转轴方向以面向原始实例
+         
+         # 修复后代码 - 只反转Y和Z轴（偶数个）以保持螺纹旋向不变
+         tz = Geom::Transformation.axes(p2, [t.xaxis.x, t.xaxis.y, t.xaxis.z], 
                                             [0.00 - t.yaxis.x, 0.00 - t.yaxis.y, 0.00 - t.yaxis.z], 
-                                            [0.00 - t.zaxis.x, 0.00 - t.zaxis.y, 0.00 - t.zaxis.z])        #反转轴方向以面向原始实例
+                                            [0.00 - t.zaxis.x, 0.00 - t.zaxis.y, 0.00 - t.zaxis.z])        #反转Y和Z轴（偶数个）以保持螺纹旋向不变
 
          h = Sketchup.active_model.entities.add_instance(defn, tz)
 
