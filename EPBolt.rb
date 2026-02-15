@@ -118,6 +118,11 @@ module EP
 
             p = params[0].split(";")
             p = p.map{|e| e.split("=")}
+            
+            # 初始化自定义参数变量
+            custom_diam = nil
+            custom_pitch = nil
+            custom_depth = nil
 
             p.each { |e|
                case e[0]
@@ -133,8 +138,41 @@ module EP
                   @@DiamModify = e[1]
                when "tt"
                   @@TPI = e[1]
+               when "cd"
+                  custom_diam = e[1]
+               when "cp"
+                  custom_pitch = e[1]
+               when "ct"
+                  custom_depth = e[1]
                end
             }
+            
+            # 如果是Custom尺寸，更新@@UTS数组中的Custom条目
+            if @@BoltSize == "Custom" && !custom_diam.nil? && !custom_pitch.nil? && !custom_depth.nil?
+               # 从深度反向计算用于标准公式的虚拟螺距（仅用于dmin计算）
+               # 标准公式: dmin = diam - (1.082532 * pitch)
+               # 实际螺纹深度 = (diam - dmin) / 2
+               # 所以: custom_depth = (diam - dmin) / 2
+               #      dmin = diam - 2 * custom_depth
+               #      diam - (1.082532 * pitch_effective) = diam - 2 * custom_depth
+               #      pitch_effective = (2 * custom_depth) / 1.082532
+               
+               diam_str = custom_diam.to_s + "mm"
+               pitch_str = custom_pitch.to_s + "mm"
+               
+               # 存储真实螺距
+               @@CustomPitch = custom_pitch
+               @@CustomDepth = custom_depth
+               
+               # 更新@@UTS数组中所有Custom条目
+               @@UTS.each { |entry|
+                  if entry[0] == "Custom"
+                     entry[2] = pitch_str   # 使用真实螺距
+                     entry[3] = diam_str    # 使用自定义直径
+                  end
+               }
+            end
+            
             die  = @@UTS.select {|s| s[0]==@@BoltSize && s[1]==@@TPI}
             head = @@BOLT.select {|s| s[0]==@@BoltSize}
             @@Pitch = EPTappedHole::cLength(die[0][2], @@UNITS)
@@ -255,7 +293,14 @@ module EP
             l = @length * scale
             m = @maxthread * scale
 
-            dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS thread
+            # 计算小径 - 如果是Custom尺寸且有自定义深度，使用自定义深度
+            if @boltsize == "Custom" && defined?(@@CustomDepth) && !@@CustomDepth.nil?
+               custom_depth = EPTappedHole::cLength(@@CustomDepth.to_s + "mm", @@UNITS)
+               dmin = d - (2 * custom_depth)  # dmin = diam - 2 * thread_depth
+            else
+               dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS thread
+            end
+            
             p8 = p / 2                   # number of 16ths
             p4 = p / 4
             p2 = p / 8
@@ -279,7 +324,7 @@ module EP
 
 
             offset = 0.00
-            if @inclwasher == "Yes" && @head != "Set"
+            if @inclwasher == "Yes" && @head != "Set" && @head != "Flat"
                awasher = EPWasher.new
                offset = awasher.create(container, @boltsize)
             end
@@ -294,6 +339,8 @@ module EP
                create_machinehead(@machine, dmaj2, offset, container)
             when "Set"
                create_sethead(@set, (arcCenter[0] - radius), offset, container)
+            when "Flat"
+               create_flathead(dmaj2, offset, container)
             else
                create_hexhead(@hex, dmaj2, offset, container)
             end
@@ -858,6 +905,28 @@ module EP
             end
             container.entities.add_faces_from_mesh(pm1,4)
             container.entities.add_faces_from_mesh(pm2,4)
+         end
+
+         #---------------------------------------------------------------------------------------------------------
+         def create_flathead(boltradius, offset, container)
+            # 无头螺栓 - 只创建一个平面圆
+            # Flat head bolt - just create a flat circle
+            
+            numberofarcsegments = @@NumberOfArcSegments
+            angle = (2 * Math::PI) / numberofarcsegments
+            vr = Geom::Vector3d.new(0,0,1)
+            tr = Geom::Transformation.rotation([0,0,0], vr, angle)
+            
+            # 创建圆形顶面
+            p = []
+            p << Geom::Point3d.new(boltradius, 0.0, offset)
+            for i in 0..(numberofarcsegments - 2)
+               p << p[i].transform(tr)
+            end
+            
+            # 添加面
+            face = container.entities.add_face(p)
+            face.reverse! if face.normal.z < 0  # 确保法线向上
          end
 
       end  #class

@@ -73,16 +73,34 @@ $(document).ready(function(){
 
     var myVar=setInterval(function () {myTimer()}, 1000);
     
+    // Handle Custom size selection
+    $("#BOLTSIZE").change(function() {
+        if ($(this).val() === "Custom") {
+            $("#CustomParamsRow").show(200);
+        } else {
+            $("#CustomParamsRow").hide(200);
+        }
+    });
+    
     $("#bOK").click(function(){
        $("#HOLEDESCRIPTION").text("Bolt: " + $("#BOLTSIZE").val() + " " +  $("#THREADTYPE").val() + ", "  + $("#LENGTH").val() + " Inches long");
        $("#PARAMETERS").hide(200);
        $("#BUTTONS").hide(200);
        $("#STATUS").show(200);
+       
+       var customParams = "";
+       if ($("#BOLTSIZE").val() === "Custom") {
+           customParams = ";cd=" + $("#CustomDiam").val() + 
+                        ";cp=" + $("#CustomPitch").val() + 
+                        ";ct=" + $("#CustomDepth").val();
+       }
+       
        results = "skp:ruby_OKPressed@bs=" + 
                          $("#BOLTSIZE").val() + 
                          ";ln=" + $("#LENGTH").val() +
                          ";tt=" + $("#THREADTYPE").val() + 
-                         ";ht=" + $("#HOLETYPE").val();
+                         ";ht=" + $("#HOLETYPE").val() +
+                         customParams;
        $("#RESULTS").val(results);
        setTimeout(function() {buildHole()},600);
     });
@@ -161,7 +179,23 @@ $(document).ready(function(){
 					<option>M24</option>
 					<option>M27</option>
 					<option>M30</option>
+					<option>Custom</option>
 				</select>
+			</td>
+		</tr>
+		<tr id="CustomParamsRow" style="display:none;">
+			<td align="right">自定义参数</td>
+			<td>
+				<table>
+					<tr>
+						<td>直径(mm):</td>
+						<td><input id="CustomDiam" type="number" value="50.0" step="0.1" style="width:80px"/></td>
+						<td>螺距(mm):</td>
+						<td><input id="CustomPitch" type="number" value="3.0" step="0.1" style="width:80px"/></td>
+						<td>深度(mm):</td>
+						<td><input id="CustomDepth" type="number" value="1.0" step="0.1" style="width:80px"/></td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		<tr>

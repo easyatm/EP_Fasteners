@@ -22,6 +22,9 @@ function setHeadType(newtype) {
     case "Machine":
         $("#cbMachine").click();
         break;
+    case "Flat":
+        $("#cbFlat").click();
+        break;
     default:
         $("#cbHex").click();
         break;
@@ -109,8 +112,7 @@ $(document).ready(function(){
     $("#cbHex").click(function()      { $("#HEADTYPE").val("Hex");});
     $("#cbSocket").click(function()   { $("#HEADTYPE").val("Socket");});
     $("#cbMachine").click(function()  { $("#HEADTYPE").val("Machine");});
-    $("#cbSetScrew").click(function() { $("#HEADTYPE").val("Set");});
-    
+    $("#cbSetScrew").click(function() { $("#HEADTYPE").val("Set");});    $("#cbFlat").click(function() { $("#HEADTYPE").val("Flat");});    
     $("#imgCoarse").click(function()  { $("#cbCoarse").click();});
     $("#imgFine").click(function()    { $("#cbFine").click();});
     $("#imgXFine").click(function()   { $("#cbXFine").click();});
@@ -195,21 +197,25 @@ $(document).ready(function(){
 			<td align="left" style="width: 300px">
 				<table style="width: 100%; vertical-align:middle">
 					<tr>
-						<td style="width: 25%">
+						<td style="width: 20%">
 							<input id="cbHex"  value="Hex" name="Headtype"  type="radio"></input>
 							<label for="cbHex"><img id="imgHex" src="HexHead.png" alt="Hex Head"/></label>
 						</td>
-						<td style="width: 25%">
+						<td style="width: 20%">
 							<input id="cbSocket" value="Socket" name="Headtype" type="radio" />
 							<label for="cbSocket"><img id="imgSocket" src="SocketHead.png" alt="Allen Socket Head"/></label>
 						</td>
-						<td style="width: 25%">
+						<td style="width: 20%">
 							<input id="cbMachine" value="Machine" name="Headtype" type="radio" />
 							<label for="cbMachine"><img id="imgMachine" src="PhillipsPanHead.png" alt="Phillips Pan Head"/></label>
 						</td>
-						<td style="width: 25%">
+						<td style="width: 20%">
 							<input id="cbSetScrew" value="Set" name="Headtype" type="radio" />
 							<label for="cbSetScrew"><img id="imgSetScrew" src="Setscrew.png" alt="Set Screw"/></label>
+						</td>
+						<td style="width: 20%">
+							<input id="cbFlat" value="Flat" name="Headtype" type="radio" />
+							<label for="cbFlat">Flat<br/>︿︿︿</label>
 						</td>
 					</tr>
 				</table>

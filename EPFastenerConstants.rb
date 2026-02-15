@@ -15,11 +15,11 @@ module EPFasteners
 #=============================================================================
 class EPFastenerConstants
 #=============================================================================
-
+ 
         #Standard number of segments per loop.  MUST BE A MULTIPLE OF 6!
         # 每个循环的标准段数。必须是6的倍数！
         #
-        @@NumberOfArcSegments = 18.0
+        @@NumberOfArcSegments = 30.0
 
         # 标准垫圈
         # 螺栓尺寸、孔尺寸、外部、厚度
@@ -208,6 +208,9 @@ class EPFastenerConstants
         @@UTS << ["M30",	"Coarse",	"3.500mm",	"30.000mm"]
         @@UTS << ["M30",	"Extra Fine",	"2.000mm",	"30.000mm"]
         @@UTS << ["M30",	"Fine",		"2.000mm",	"30.000mm"]
+        @@UTS << ["Custom",	"Coarse",	"3.000mm",	"50.000mm"]
+        @@UTS << ["Custom",	"Extra Fine",	"3.000mm",	"50.000mm"]
+        @@UTS << ["Custom",	"Fine",		"3.000mm",	"50.000mm"]
 
 
         # 标准六角螺母
@@ -259,6 +262,7 @@ class EPFastenerConstants
 	@@NUT << ["M24",	["36.000mm",	"15.000mm"]]
 	@@NUT << ["M27",	["41.000mm",	"17.000mm"]]
 	@@NUT << ["M30",	["46.000mm",	"18.700mm"]]
+	@@NUT << ["Custom",	["75.000mm",	"28.000mm"]]
 
         # 标准螺栓
         # Standard Bolts
@@ -320,6 +324,7 @@ class EPFastenerConstants
 	@@BOLT << ["M24",	"64.000mm",	["36.000mm","15.000mm"]	,["19.000mm",	"36.000mm","24.000mm"]	,["48.000mm",	"18.000mm",4,"12.000mm"]	,["12.000mm"]]
 	@@BOLT << ["M27",	"64.000mm",	["41.000mm","17.000mm"]	,["19.000mm",	"40.000mm","27.000mm"]	,["54.000mm",	"20.250mm",4,"12.000mm"]	,["12.000mm"]]
 	@@BOLT << ["M30",	"64.000mm",	["46.000mm","18.700mm"]	,["22.000mm",	"45.000mm","30.000mm"]	,["60.000mm",	"22.500mm",4,"12.000mm"]	,["14.000mm"]]
+	@@BOLT << ["Custom",	"80.000mm",	["75.000mm","28.000mm"]	,["30.000mm",	"67.500mm","50.000mm"]	,["90.000mm",	"37.500mm",6,"18.000mm"]	,["20.000mm"]]
 
 
         #标准十字头螺丝刀尺寸 0 到 4

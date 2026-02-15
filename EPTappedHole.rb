@@ -115,6 +115,12 @@ end
 def self.performOK(*params)
    p = params[0].split(";")
    p = p.map{|e| e.split("=")}
+   
+   # 初始化自定义参数变量
+   custom_diam = nil
+   custom_pitch = nil
+   custom_depth = nil
+   
    p.each { |e|
 
       case e[0]
@@ -126,8 +132,32 @@ def self.performOK(*params)
             @@ThruHole = (e[1]=="ThruHole" ? "Yes" : "No")
          when "tt"
             @@TPI = e[1]
+         when "cd"
+            custom_diam = e[1]
+         when "cp"
+            custom_pitch = e[1]
+         when "ct"
+            custom_depth = e[1]
      end
    }
+
+   # 如果是Custom尺寸，更新@@UTS数组中的Custom条目
+   if @@BoltSize == "Custom" && !custom_diam.nil? && !custom_pitch.nil? && !custom_depth.nil?
+      diam_str = custom_diam.to_s + "mm"
+      pitch_str = custom_pitch.to_s + "mm"
+      
+      # 存储自定义参数
+      @@CustomPitch = custom_pitch
+      @@CustomDepth = custom_depth
+      
+      # 更新@@UTS数组中所有Custom条目
+      @@UTS.each { |entry|
+         if entry[0] == "Custom"
+            entry[2] = pitch_str
+            entry[3] = diam_str
+         end
+      }
+   end
 
    die  = @@UTS.select {|s| s[0]==@@BoltSize && s[1]==@@TPI}
 
@@ -284,7 +314,14 @@ end
       p = @pitch.to_l  * scale 
       l = @length.to_l  * scale
 
-      dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS or Metric thread
+      # 计算小径 - 如果是Custom尺寸且有自定义深度，使用自定义深度
+      if @boltsize == "Custom" && defined?(@@CustomDepth) && !@@CustomDepth.nil?
+         custom_depth = EPTappedHole::cLength(@@CustomDepth.to_s + "mm", @@UNITS)
+         dmin = d - (2 * custom_depth)  # dmin = diam - 2 * thread_depth
+      else
+         dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS or Metric thread
+      end
+      
       p8 = p / 2                   # number of 16ths
       p4 = p / 4
       p2 = p / 8

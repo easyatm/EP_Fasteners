@@ -111,6 +111,12 @@ def self.performOK(*params)
 
    p = params[0].split(";")
    p = p.map{|e| e.split("=")}
+   
+   # 初始化自定义参数变量
+   custom_diam = nil
+   custom_pitch = nil
+   custom_depth = nil
+   
    p.each { |e|
       case e[0]
          when "bs"
@@ -119,8 +125,33 @@ def self.performOK(*params)
             @@TPI = e[1]
         when "ws"
             @@Inclwasher = e[1]=="true" ? "Yes" : "No"
+        when "cd"
+            custom_diam = e[1]
+        when "cp"
+            custom_pitch = e[1]
+        when "ct"
+            custom_depth = e[1]
      end
    }
+   
+   # 如果是Custom尺寸，更新@@UTS数组中的Custom条目
+   if @@BoltSize == "Custom" && !custom_diam.nil? && !custom_pitch.nil? && !custom_depth.nil?
+      diam_str = custom_diam.to_s + "mm"
+      pitch_str = custom_pitch.to_s + "mm"
+      
+      # 存储自定义参数
+      @@CustomPitch = custom_pitch
+      @@CustomDepth = custom_depth
+      
+      # 更新@@UTS数组中所有Custom条目
+      @@UTS.each { |entry|
+         if entry[0] == "Custom"
+            entry[2] = pitch_str
+            entry[3] = diam_str
+         end
+      }
+   end
+   
    die  = @@UTS.select {|s| s[0]==@@BoltSize && s[1]==@@TPI}
    head = @@BOLT.select {|s| s[0]==@@BoltSize}
    @@Pitch = die[0][2]
@@ -209,7 +240,14 @@ end
      d = EPNut::cLength(@diam, @units) * scale 
      p = EPNut::cLength(@pitch, @units) * scale 
 
-     dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS thread
+     # 计算小径 - 如果是Custom尺寸且有自定义深度，使用自定义深度
+     if @boltsize == "Custom" && defined?(@@CustomDepth) && !@@CustomDepth.nil?
+        custom_depth = EPNut::cLength(@@CustomDepth.to_s + "mm", @units)
+        dmin = d - (2 * custom_depth)  # dmin = diam - 2 * thread_depth
+     else
+        dmin = d - (1.082532 * p)    #defined in UTS standard see: wiki UTS thread
+     end
+     
      p8 = p / 2.0                   # number of 16ths
      p4 = p / 4.0
      p2 = p / 8.0
